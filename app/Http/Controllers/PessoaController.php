@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tb_endereco;
+use App\Models\Tb_pessoa;
+use App\Models\Tb_uf;
 use Illuminate\Http\Request;
 
 class PessoaController extends Controller
@@ -13,7 +16,7 @@ class PessoaController extends Controller
      */
     public function index()
     {
-        //
+      return Tb_uf::all();
     }
 
     /**
@@ -34,7 +37,9 @@ class PessoaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $pessoa = Tb_pessoa::create( $request->all());
+      $endereco = Tb_endereco::create( $request->all());
+      return [$pessoa, $endereco];
     }
 
     /**

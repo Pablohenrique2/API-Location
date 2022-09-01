@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tb_endereco', function (Blueprint $table) {
-            $table->foreign('codigo_pessoa')->references('id')->on('tb_pessoa')->onDelete('cascade')
+        Schema::table('tb_enderecos', function (Blueprint $table) {
+            $table->foreign('codigo_pessoa')->references('id')->on('tb_pessoas')->onDelete('cascade')
             ->onUpdate('CASCADE');
-            $table->foreign('codigo_bairro')->references('id')->on('tb_bairro')->onDelete('cascade')
+            $table->foreign('codigo_bairro')->references('id')->on('tb_bairros')->onDelete('cascade')
             ->onUpdate('CASCADE');
         });
     }

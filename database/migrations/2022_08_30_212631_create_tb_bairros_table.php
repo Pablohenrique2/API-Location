@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tb_uf', function (Blueprint $table) {
+        Schema::create('tb_bairros', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla', 3);
-            $table->string('nome', 60);
+            $table->integer('codigo_municipio')->unsigned();
+            $table->string('nome', 256);
             $table->smallInteger('status');
             $table->timestamps();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tb_uf');
+        Schema::dropIfExists('tb_bairro');
     }
 };

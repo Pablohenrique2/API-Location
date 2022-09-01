@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tb_bairro', function (Blueprint $table) {
-            $table->foreign('codigo_municipio')->references('id')->on('tb_municipio')->onDelete('cascade')
-            ->onUpdate('CASCADE');
+        Schema::create('tb_ufs', function (Blueprint $table) {
+            $table->id();
+            $table->string('sigla', 3);
+            $table->string('nome', 60);
+            $table->smallInteger('status');
+            $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -26,9 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tb_bairro', function (Blueprint $table) {
-            $table->dropColumn('codigo_municipio');
-           
-        });
+        Schema::dropIfExists('tb_uf');
     }
 };
