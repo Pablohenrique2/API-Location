@@ -15,7 +15,6 @@ return new class extends Migration
   {
     Schema::create('tb_pessoas', function (Blueprint $table) {
       $table->id();
-      $table->bigInteger('codigo_pessoa');
       $table->string('nome', 256);
       $table->string('sobrenome', 256);
       $table->smallInteger('idade');
