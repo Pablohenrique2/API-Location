@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Tb_uf extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 }
