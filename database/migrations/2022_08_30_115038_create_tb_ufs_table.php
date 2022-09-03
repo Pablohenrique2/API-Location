@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tb_ufs', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla', 3);
+            $table->string('sigla', 3)->unique();
             $table->string('nome', 60);
             $table->smallInteger('status');
             $table->timestamps();

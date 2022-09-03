@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePessoaRequest;
 use App\Models\Tb_endereco;
 use App\Models\Tb_pessoa;
 use App\Models\Tb_uf;
@@ -9,11 +10,27 @@ use Illuminate\Http\Request;
 
 class PessoaController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
-    $pessoa = Tb_pessoa::all();
-    $endereco = Tb_endereco::all();
-    return [$pessoa, $endereco];
+    $codigo = $request->codigo_pessoa;
+    $login = $request->login;
+    $status = $request->status;
+    $pessoa = Tb_pessoa::where(function($query) use ($codigo,$login,$status){
+      if($codigo && $login && $status ) {
+        $query->where('codigo_pessoa',$codigo);
+        $query->where('login',$login);
+        $query->where('status',$status);
+      } elseif ($login && $codigo) {
+        $query->where('login',$login);
+        $query->where('codigo_pessoa',$codigo);
+      }  elseif ($status) {
+        $query->where('status',$status);
+      } elseif ($login){
+        $query->where('login',$login);
+      }
+    })->get();
+
+    return $pessoa;
   }
 
   public function create()
@@ -21,7 +38,7 @@ class PessoaController extends Controller
     //
   }
 
-  public function store(Request $request)
+  public function store(StorePessoaRequest $request)
   {
     $pessoa = new Tb_pessoa;
     $pessoa->nome = $request->nome;
@@ -39,7 +56,7 @@ class PessoaController extends Controller
     $endereco->complemento = $request->complemento;
     $endereco->cep = $request->cep;
     $endereco->save();
-    return [$pessoa, $endereco];
+    return response()->json("Pessoa cadastrada com sucesso.", 201);
   }
 
   public function show($id)
@@ -51,10 +68,10 @@ class PessoaController extends Controller
 
   public function edit($id)
   {
-
+    //
   }
 
-  public function update(Request $request, $id)
+  public function update(StorePessoaRequest $request, $id)
   {
     $pessoa = Tb_pessoa::findOrfail($request->id)->update($request->all());
     $endereco = Tb_endereco::findOrfail($request->id)->update($request->all());

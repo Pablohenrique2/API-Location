@@ -2,14 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBairroRequest;
 use App\Models\Tb_bairro;
 use Illuminate\Http\Request;
 
 class BairroController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
-    return Tb_bairro::all();
+    $codigo = $request->codigo_bairro;
+    $nome = $request->nome;
+    $status = $request->status;
+    $codigo_municipio = $request->codigo_municipio;
+    $bairro = Tb_bairro::where(function($query) use ($codigo,$nome,$codigo_municipio,$status){
+      if($codigo && $nome && $codigo_municipio) {
+        $query->where('codigo_bairro',$codigo);
+        $query->where('nome',$nome);
+        $query->where('codigo_municipio',$codigo_municipio);
+      } elseif ($codigo) {
+        $query->where('codigo_bairro',$codigo);
+      } elseif ($nome && $codigo_municipio) {
+        $query->where('nome',$nome);
+        $query->where('codigo_municipio',$codigo_municipio);
+      } elseif($nome){
+        $query->where('nome',$nome);
+      } elseif($status) {
+        $query->where('status',$status);
+      }
+    })->get();
+
+    return $bairro;
   }
 
   public function create()
@@ -17,9 +39,10 @@ class BairroController extends Controller
       //
   }
 
-  public function store(Request $request)
+  public function store(StoreBairroRequest $request)
   {
-      return  Tb_bairro::create( $request->all());
+    Tb_bairro::create( $request->all());
+    return response()->json("Bairro cadastrado com sucesso.", 201);
   }
 
   public function show($id)
@@ -32,11 +55,11 @@ class BairroController extends Controller
     //
   }
 
-  public function update(Tb_bairro $bairro,Request $request)
+  public function update(Tb_bairro $bairro,StoreBairroRequest $request)
   {
     $bairro->fill( $request->all());
     $bairro->save();
-    return $bairro;
+    return Tb_bairro::all();
   }
 
   public function destroy($id)
